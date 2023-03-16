@@ -138,20 +138,10 @@ public class DistributedCacheBinder :
     #region UserService
 
     public void Handle(UserSavedNotification notification)
-    {
-        foreach (IUser entity in notification.SavedEntities)
-        {
-            _distributedCache.RefreshUserCache(entity.Id);
-        }
-    }
+        => _distributedCache.RefreshUserCache(notification.SavedEntities);
 
     public void Handle(UserDeletedNotification notification)
-    {
-        foreach (IUser entity in notification.DeletedEntities)
-        {
-            _distributedCache.RemoveUserCache(entity.Id);
-        }
-    }
+        => _distributedCache.RemoveUserCache(notification.DeletedEntities);
 
     public void Handle(UserGroupWithUsersSavedNotification notification)
     {
