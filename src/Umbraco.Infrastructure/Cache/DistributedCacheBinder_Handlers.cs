@@ -3,7 +3,6 @@
 
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Extensions;
 
@@ -144,20 +143,10 @@ public class DistributedCacheBinder :
         => _distributedCache.RemoveUserCache(notification.DeletedEntities);
 
     public void Handle(UserGroupWithUsersSavedNotification notification)
-    {
-        foreach (UserGroupWithUsers entity in notification.SavedEntities)
-        {
-            _distributedCache.RefreshUserGroupCache(entity.UserGroup.Id);
-        }
-    }
+        => _distributedCache.RefreshUserGroupCache(notification.SavedEntities.Select(x => x.UserGroup));
 
     public void Handle(UserGroupDeletedNotification notification)
-    {
-        foreach (IUserGroup entity in notification.DeletedEntities)
-        {
-            _distributedCache.RemoveUserGroupCache(entity.Id);
-        }
-    }
+        => _distributedCache.RemoveUserGroupCache(notification.DeletedEntities);
 
     #endregion
 
