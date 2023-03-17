@@ -142,8 +142,14 @@ public static class DistributedCacheExtensions
     public static void RefreshMemberGroupCache(this DistributedCache dc, int memberGroupId)
         => dc.Refresh(MemberGroupCacheRefresher.UniqueId, memberGroupId);
 
+    public static void RefreshMemberGroupCache(this DistributedCache dc, IEnumerable<IMemberGroup> memberGroups)
+        => dc.RefreshByPayload(MemberGroupCacheRefresher.UniqueId, memberGroups.Select(x => new MemberGroupCacheRefresher.JsonPayload(x.Id, x.Name, false)));
+
     public static void RemoveMemberGroupCache(this DistributedCache dc, int memberGroupId)
         => dc.Remove(MemberGroupCacheRefresher.UniqueId, memberGroupId);
+
+    public static void RemoveMemberGroupCache(this DistributedCache dc, IEnumerable<IMemberGroup> memberGroups)
+        => dc.RefreshByPayload(MemberGroupCacheRefresher.UniqueId, memberGroups.Select(x => new MemberGroupCacheRefresher.JsonPayload(x.Id, x.Name, true)));
 
     #endregion
 

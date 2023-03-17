@@ -16,15 +16,23 @@ public sealed class MemberGroupCacheRefresher : PayloadCacheRefresherBase<Member
 
     public class JsonPayload
     {
-        public JsonPayload(int id, string name)
+        public JsonPayload(int id, string? name)
+            : this(id, name, false)
+        {
+        }
+
+        public JsonPayload(int id, string? name, bool removed)
         {
             Id = id;
             Name = name;
+            Removed = removed;
         }
 
-        public string Name { get; }
-
         public int Id { get; }
+
+        public string? Name { get; }
+
+        public bool Removed { get; }
     }
 
     #endregion
@@ -41,26 +49,28 @@ public sealed class MemberGroupCacheRefresher : PayloadCacheRefresherBase<Member
 
     #region Refresher
 
-    public override void Refresh(string json)
-    {
-        ClearCache();
-        base.Refresh(json);
-    }
-
     public override void Refresh(int id)
     {
         ClearCache();
+
         base.Refresh(id);
     }
 
     public override void Remove(int id)
     {
         ClearCache();
+
         base.Remove(id);
     }
 
-    private void ClearCache() =>
+    public override void Refresh(JsonPayload[] payloads)
+    {
+        ClearCache();
 
+        base.Refresh(payloads);
+    }
+
+    private void ClearCache() =>
         // Since we cache by group name, it could be problematic when renaming to
         // previously existing names - see http://issues.umbraco.org/issue/U4-10846.
         // To work around this, just clear all the cache items

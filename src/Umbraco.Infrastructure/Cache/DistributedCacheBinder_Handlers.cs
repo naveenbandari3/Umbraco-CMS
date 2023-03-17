@@ -200,20 +200,10 @@ public class DistributedCacheBinder :
     #region MemberGroupService
 
     public void Handle(MemberGroupDeletedNotification notification)
-    {
-        foreach (IMemberGroup entity in notification.DeletedEntities)
-        {
-            _distributedCache.RemoveMemberGroupCache(entity.Id);
-        }
-    }
+        => _distributedCache.RemoveMemberGroupCache(notification.DeletedEntities);
 
     public void Handle(MemberGroupSavedNotification notification)
-    {
-        foreach (IMemberGroup entity in notification.SavedEntities)
-        {
-            _distributedCache.RemoveMemberGroupCache(entity.Id);
-        }
-    }
+        => _distributedCache.RefreshMemberGroupCache(notification.SavedEntities);
 
     #endregion
 
