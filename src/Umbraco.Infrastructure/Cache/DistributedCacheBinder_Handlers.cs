@@ -68,20 +68,10 @@ public class DistributedCacheBinder :
     #region LocalizationService
 
     public void Handle(DictionaryItemSavedNotification notification)
-    {
-        foreach (IDictionaryItem entity in notification.SavedEntities)
-        {
-            _distributedCache.RefreshDictionaryCache(entity.Id);
-        }
-    }
+        => _distributedCache.RefreshDictionaryCache(notification.SavedEntities);
 
     public void Handle(DictionaryItemDeletedNotification notification)
-    {
-        foreach (IDictionaryItem entity in notification.DeletedEntities)
-        {
-            _distributedCache.RemoveDictionaryCache(entity.Id);
-        }
-    }
+        => _distributedCache.RemoveDictionaryCache(notification.DeletedEntities);
 
     #endregion
 

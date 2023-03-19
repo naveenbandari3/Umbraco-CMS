@@ -79,8 +79,14 @@ public static class DistributedCacheExtensions
     public static void RefreshDictionaryCache(this DistributedCache dc, int dictionaryItemId)
         => dc.Refresh(DictionaryCacheRefresher.UniqueId, dictionaryItemId);
 
+    public static void RefreshDictionaryCache(this DistributedCache dc, IEnumerable<IDictionaryItem> dictionaryItems)
+        => dc.RefreshByPayload(DictionaryCacheRefresher.UniqueId, dictionaryItems.Select(x => new DictionaryCacheRefresher.JsonPayload(x.Id, x.Key, false)));
+
     public static void RemoveDictionaryCache(this DistributedCache dc, int dictionaryItemId)
         => dc.Remove(DictionaryCacheRefresher.UniqueId, dictionaryItemId);
+
+    public static void RemoveDictionaryCache(this DistributedCache dc, IEnumerable<IDictionaryItem> dictionaryItems)
+        => dc.RefreshByPayload(DictionaryCacheRefresher.UniqueId, dictionaryItems.Select(x => new DictionaryCacheRefresher.JsonPayload(x.Id, x.Key, true)));
 
     #endregion
 
