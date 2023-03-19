@@ -153,20 +153,10 @@ public class DistributedCacheBinder :
     #region FileService
 
     public void Handle(TemplateDeletedNotification notification)
-    {
-        foreach (ITemplate entity in notification.DeletedEntities)
-        {
-            _distributedCache.RemoveTemplateCache(entity.Id);
-        }
-    }
+        => _distributedCache.RemoveTemplateCache(notification.DeletedEntities);
 
     public void Handle(TemplateSavedNotification notification)
-    {
-        foreach (ITemplate entity in notification.SavedEntities)
-        {
-            _distributedCache.RefreshTemplateCache(entity.Id);
-        }
-    }
+        => _distributedCache.RefreshTemplateCache(notification.SavedEntities);
 
     #endregion
 
