@@ -190,20 +190,10 @@ public class DistributedCacheBinder :
     #region RelationTypeService
 
     public void Handle(RelationTypeSavedNotification notification)
-    {
-        foreach (IRelationType entity in notification.SavedEntities)
-        {
-            _distributedCache.RefreshRelationTypeCache(entity.Id);
-        }
-    }
+        => _distributedCache.RefreshRelationTypeCache(notification.SavedEntities);
 
     public void Handle(RelationTypeDeletedNotification notification)
-    {
-        foreach (IRelationType entity in notification.DeletedEntities)
-        {
-            _distributedCache.RemoveRelationTypeCache(entity.Id);
-        }
-    }
+        => _distributedCache.RemoveRelationTypeCache(notification.DeletedEntities);
 
     #endregion
 }

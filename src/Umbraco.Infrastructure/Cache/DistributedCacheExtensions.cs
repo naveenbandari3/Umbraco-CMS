@@ -284,8 +284,14 @@ public static class DistributedCacheExtensions
     public static void RefreshRelationTypeCache(this DistributedCache dc, int id)
         => dc.Refresh(RelationTypeCacheRefresher.UniqueId, id);
 
+    public static void RefreshRelationTypeCache(this DistributedCache dc, IEnumerable<IRelationType> relationTypes)
+        => dc.RefreshByPayload(RelationTypeCacheRefresher.UniqueId, relationTypes.Select(x => new RelationTypeCacheRefresher.JsonPayload(x.Id, x.Key, false)));
+
     public static void RemoveRelationTypeCache(this DistributedCache dc, int id)
         => dc.Remove(RelationTypeCacheRefresher.UniqueId, id);
+
+    public static void RemoveRelationTypeCache(this DistributedCache dc, IEnumerable<IRelationType> relationTypes)
+        => dc.RefreshByPayload(RelationTypeCacheRefresher.UniqueId, relationTypes.Select(x => new RelationTypeCacheRefresher.JsonPayload(x.Id, x.Key, true)));
 
     #endregion
 }
